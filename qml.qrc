@@ -1,5 +1,32 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>Assets/Background/Background.png</file>
+        <file>Assets/Background/TrailerView.png</file>
+        <file>Assets/Indicators/RelayIndicator_Green.png</file>
+        <file>Assets/Indicators/RelayIndicator_Red.png</file>
+        <file>Assets/Buttons/BLockBtn_Green.png</file>
+        <file>Assets/Buttons/BLockBtn_Red.png</file>
+        <file>Assets/Buttons/BrakeBtn_Green.png</file>
+        <file>Assets/Buttons/BrakeBtn_Red.png</file>
+        <file>Assets/Buttons/BrakeDecBtn_Green.png</file>
+        <file>Assets/Buttons/BrakeDecBtn_Red.png</file>
+        <file>Assets/Buttons/BrakeIncBtn_Green.png</file>
+        <file>Assets/Buttons/BrakeIncBtn_Red.png</file>
+        <file>Assets/Buttons/CameraBtn_Green.png</file>
+        <file>Assets/Buttons/CameraBtn_Red.png</file>
+        <file>Assets/Buttons/CompBtn_Green.png</file>
+        <file>Assets/Buttons/CompBtn_Red.png</file>
+        <file>Assets/Buttons/DumpBagsBtn_Green.png</file>
+        <file>Assets/Buttons/DumpBagsBtn_Red.png</file>
+        <file>Assets/Buttons/FLockBtn_Green.png</file>
+        <file>Assets/Buttons/FLockBtn_Red.png</file>
+        <file>Assets/Buttons/LightsBtn_Green.png</file>
+        <file>Assets/Buttons/LightsBtn_Red.png</file>
+        <file>Assets/Buttons/SLockBtn_Green.png</file>
+        <file>Assets/Buttons/SLockBtn_Red.png</file>
+        <file>Pages/Components/PressableButton.qml</file>
+        <file>Pages/ControlPage/ControlPage.qml</file>
+        <file>Pages/Components/ToggleableButton.qml</file>
     </qresource>
 </RCC>
