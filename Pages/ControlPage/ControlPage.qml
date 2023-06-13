@@ -103,7 +103,7 @@ Item {
         iconOnState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
         iconOnPressedState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
 
-        isOn: false
+        isOn: backendController.relay1State
     }
 
     ToggleableButton {
@@ -120,7 +120,7 @@ Item {
         iconOnState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
         iconOnPressedState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
 
-        isOn: false
+        isOn: backendController.relay2State
     }
 
     ToggleableButton {
@@ -137,7 +137,7 @@ Item {
         iconOnState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
         iconOnPressedState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
 
-        isOn: false
+        isOn: backendController.relay3State
     }
 
     ToggleableButton {
@@ -154,7 +154,7 @@ Item {
         iconOnState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
         iconOnPressedState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
 
-        isOn: false
+        isOn: backendController.relay4State
     }
 
     ToggleableButton {
@@ -171,7 +171,7 @@ Item {
         iconOnState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
         iconOnPressedState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
 
-        isOn: false
+        isOn: backendController.relay5State
     }
 
     ToggleableButton {
@@ -188,7 +188,7 @@ Item {
         iconOnState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
         iconOnPressedState: "qrc:/Assets/Indicators/RelayIndicator_Green.png"
 
-        isOn: false
+        isOn: backendController.relay6State
     }
 
     // --------------------- Pressure ----------------------------//
@@ -203,7 +203,7 @@ Item {
         anchors.leftMargin: respWidth(394)
         color: "transparent"
 
-        property int value: 20
+        property int value: backendController.frontPressure
 
         Label {
             anchors.top: parent.top
@@ -234,7 +234,7 @@ Item {
         anchors.leftMargin: respWidth(692)
         color: "transparent"
 
-        property int value: 16
+        property int value: backendController.tankPressure
 
         Label {
             anchors.top: parent.top
@@ -265,7 +265,7 @@ Item {
         anchors.leftMargin: respWidth(989)
         color: "transparent"
 
-        property int value: 09
+        property int value: backendController.rearPressure
 
         Label {
             anchors.top: parent.top
@@ -302,8 +302,10 @@ Item {
         iconOnState: "qrc:/Assets/Buttons/FLockBtn_Red.png"
         iconOnPressedState: "qrc:/Assets/Buttons/FLockBtn_Red.png"
 
+        isOn: backendController.frontLockState
+
         onClicked: {
-            frontLockBtn.isOn = !frontLockBtn.isOn
+            backendController.frontLockTriggered(!frontLockBtn.isOn)
         }
     }
 
@@ -321,8 +323,10 @@ Item {
         iconOnState: "qrc:/Assets/Buttons/BLockBtn_Red.png"
         iconOnPressedState: "qrc:/Assets/Buttons/BLockBtn_Red.png"
 
+        isOn: backendController.backLockState
+
         onClicked: {
-            backLockBtn.isOn = !backLockBtn.isOn
+            backendController.backLockTriggered(!backLockBtn.isOn)
         }
     }
 
@@ -340,8 +344,10 @@ Item {
         iconOnState: "qrc:/Assets/Buttons/SLockBtn_Red.png"
         iconOnPressedState: "qrc:/Assets/Buttons/SLockBtn_Red.png"
 
+        isOn: backendController.steerLockState
+
         onClicked: {
-            steerLockBtn.isOn = !steerLockBtn.isOn
+            backendController.steerLockTriggered(!steerLockBtn.isOn)
         }
     }
 
@@ -359,8 +365,10 @@ Item {
         iconOnState: "qrc:/Assets/Buttons/DumpBagsBtn_Green.png"
         iconOnPressedState: "qrc:/Assets/Buttons/DumpBagsBtn_Green.png"
 
+        isOn: backendController.dumpBagsState
+
         onClicked: {
-            dumpBagsBtn.isOn = !dumpBagsBtn.isOn
+            backendController.dumpBagsTriggered(!dumpBagsBtn.isOn)
         }
     }
 
@@ -378,8 +386,10 @@ Item {
         iconOnState: "qrc:/Assets/Buttons/CompBtn_Green.png"
         iconOnPressedState: "qrc:/Assets/Buttons/CompBtn_Green.png"
 
+        isOn: backendController.compressorState
+
         onClicked: {
-            compressorBtn.isOn = !compressorBtn.isOn
+            backendController.compressorTriggered(!compressorBtn.isOn)
         }
     }
 
@@ -397,8 +407,10 @@ Item {
         iconOnState: "qrc:/Assets/Buttons/LightsBtn_Red.png"
         iconOnPressedState: "qrc:/Assets/Buttons/LightsBtn_Red.png"
 
+        isOn: backendController.lightState
+
         onClicked: {
-            lightsBtn.isOn = !lightsBtn.isOn
+            backendController.lightsTriggered(!lightsBtn.isOn)
         }
     }
 
@@ -415,7 +427,11 @@ Item {
         iconPressedState: "qrc:/Assets/Buttons/BrakeIncBtn_Red.png"
 
         onPressed: {
-            // Send Brake Increase signal
+            backendController.brakeIncPressed()
+        }
+
+        onReleased: {
+            backendController.brakeIncReleased()
         }
     }
 
@@ -431,7 +447,7 @@ Item {
         iconSrc: "qrc:/Assets/Buttons/BrakeBtn_Green.png"
         iconPressedState: "qrc:/Assets/Buttons/BrakeBtn_Red.png"
 
-        property int brakePercent: 50
+        property int brakePercent: backendController.brakePercent
 
         Label {
             anchors.centerIn: parent
@@ -442,7 +458,7 @@ Item {
         }
 
         onPressed: {
-            // Send Brake signal
+            backendController.brakeTriggered()
         }
     }
 
@@ -459,7 +475,11 @@ Item {
         iconPressedState: "qrc:/Assets/Buttons/BrakeDecBtn_Red.png"
 
         onPressed: {
-            // Send Brake Decrease signal
+            backendController.brakeDecPressed()
+        }
+
+        onReleased: {
+            backendController.brakeDecReleased()
         }
     }
 
@@ -479,6 +499,7 @@ Item {
 
         onClicked: {
             cameraBtn.isOn = !cameraBtn.isOn
+            backendController.cameraTriggered(cameraBtn.isOn)
 
             if(cameraBtn.isOn == true) {
                 cameraPopUp.open()

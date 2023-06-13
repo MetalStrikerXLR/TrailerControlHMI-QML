@@ -56,6 +56,62 @@ class BackendController(QObject):
         print("Arduino reset triggered. Resetting UI as well")
         self.resetComplete.emit()
 
+    @pyqtSlot(bool)
+    def frontLockTriggered(self, state):
+        print("Front Lock Triggered", state)
+        self.frontLockState = state
+
+    @pyqtSlot(bool)
+    def backLockTriggered(self, state):
+        print("Back Lock Triggered", state)
+        self.backLockState = state
+
+    @pyqtSlot(bool)
+    def steerLockTriggered(self, state):
+        print("Steer Lock Triggered", state)
+        self.steerLockState = state
+
+    @pyqtSlot(bool)
+    def dumpBagsTriggered(self, state):
+        print("Dump Bags Triggered", state)
+        self.dumpBagsState = state
+
+    @pyqtSlot(bool)
+    def compressorTriggered(self, state):
+        print("Dump Bags Triggered", state)
+        self.compressorState = state
+
+    @pyqtSlot(bool)
+    def lightsTriggered(self, state):
+        print("Lights Triggered", state)
+        self.lightState = state
+
+    @pyqtSlot(bool)
+    def cameraTriggered(self, state):
+        print("Camera Triggered", state)
+
+    @pyqtSlot()
+    def brakeIncPressed(self):
+        print("Brake Increase Press")
+        self.brakePercent += 15
+
+    @pyqtSlot()
+    def brakeIncReleased(self):
+        print("Brake Increase Release")
+
+    @pyqtSlot()
+    def brakeDecPressed(self):
+        print("Brake Decrease Press")
+        self.brakePercent -= 15
+
+    @pyqtSlot()
+    def brakeDecReleased(self):
+        print("Brake Decrease Release")
+
+    @pyqtSlot()
+    def brakeTriggered(self):
+        print("Brakes Triggered")
+
     # ---------------------------------------- QML Exposed Properties ---------------------------------------- #
 
     @pyqtProperty(float, notify=frontLockStateChanged)
@@ -168,7 +224,7 @@ class BackendController(QObject):
 
     @pyqtProperty(int, notify=frontPressChanged)
     def frontPressure(self):
-        return self.m_frontPress
+        return self.m_frontPressure
 
     @frontPressure.setter
     def frontPressure(self, pressure):
