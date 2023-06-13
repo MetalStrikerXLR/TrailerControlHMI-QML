@@ -2,8 +2,6 @@ from PyQt5.QtCore import QObject, pyqtSignal, pyqtProperty, pyqtSlot, QTimer
 
 
 class BackendController(QObject):
-    dataReceived = pyqtSignal(str)
-    resetComplete = pyqtSignal()
 
     frontLockStateChanged = pyqtSignal()
     backLockStateChanged = pyqtSignal()
@@ -50,11 +48,6 @@ class BackendController(QObject):
         self.m_brakePercent = 0
 
         print("Init complete")
-
-    @pyqtSlot()
-    def resetUI(self):
-        print("Arduino reset triggered. Resetting UI as well")
-        self.resetComplete.emit()
 
     @pyqtSlot(bool)
     def frontLockTriggered(self, state):
