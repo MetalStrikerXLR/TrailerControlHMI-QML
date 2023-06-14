@@ -32,4 +32,9 @@ Window {
         anchors.fill: parent
         visible: true
     }
+
+    onClosing: {
+        console.log("Closing")
+        controlPage.camOpenCV.stop()
+    }
 }

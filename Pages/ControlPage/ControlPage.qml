@@ -1,10 +1,13 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import CameraQML 1.0
 import "../Components"
 
 Item {
     id: controlPageRoot
     property string objectName: "ControlPage"
+
+    property alias camOpenCV: camOpenCV
 
     property int glowPixel: 17
     property int glowPixelRelay: 9
@@ -40,6 +43,7 @@ Item {
         visible: false
         opacity: 0
         closePolicy: Popup.CloseOnEscape
+        clip: true
 
         background: Rectangle {
             color: "black"
@@ -48,13 +52,6 @@ Item {
             radius: respAvg(30)
             clip: true
 
-            Image {
-                id: cameraView
-                anchors.fill: parent
-                source: ""
-                visible: true
-            }
-
             Label {
                 id: noPreviewLabel
                 anchors.centerIn: parent
@@ -62,6 +59,21 @@ Item {
                 color: "white"
                 font.pixelSize: respAvg(60)
                 visible: true
+            }
+
+            CameraView  {
+                id: camViewer
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: respWidth(1040)
+                height: respHeight(560)
+                image: camOpenCV.image
+            }
+
+            CameraCapture{
+                id: camOpenCV
+                source: 0
+                Component.onCompleted: camOpenCV.start()
             }
         }
 
