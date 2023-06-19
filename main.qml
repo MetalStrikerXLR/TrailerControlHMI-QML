@@ -35,6 +35,6 @@ Window {
 
     onClosing: {
         console.log("Closing")
-        controlPage.camOpenCV.stop()
+        controlPage.camCapture.stop()
     }
 }

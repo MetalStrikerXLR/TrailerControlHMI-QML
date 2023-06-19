@@ -7,7 +7,7 @@ Item {
     id: controlPageRoot
     property string objectName: "ControlPage"
 
-    property alias camOpenCV: camOpenCV
+    property alias camCapture: camCapture
 
     property int glowPixel: 17
     property int glowPixelRelay: 9
@@ -67,13 +67,17 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: respWidth(1040)
                 height: respHeight(560)
-                image: camOpenCV.image
+                image: camCapture.image
+                visible: false
             }
 
             CameraCapture{
-                id: camOpenCV
-                source: 0
-                Component.onCompleted: camOpenCV.start()
+                id: camCapture
+                sourceType: "socket"
+                source: 8485
+                onStreamAvailable: camViewer.visible = true
+                onStreamNotAvailable: camViewer.visible = false
+                Component.onCompleted: camCapture.start()
             }
         }
 
