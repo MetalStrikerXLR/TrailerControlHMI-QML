@@ -28,6 +28,7 @@ class CameraCapture(QObject):
 
         self.m_videoCapture = cv2.VideoCapture()
         self.m_busy = False
+        print("Camera object created.")
 
     @pyqtSlot()
     def start(self):

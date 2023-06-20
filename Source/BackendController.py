@@ -1,4 +1,5 @@
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtProperty, pyqtSlot, QTimer
+import paho.mqtt.client as mqtt
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtProperty, pyqtSlot
 
 
 class BackendController(QObject):
@@ -33,7 +34,7 @@ class BackendController(QObject):
 
         self.m_dumpBagsState = False
         self.m_compressorState = False
-        self.lightState = False
+        self.m_lightState = False
 
         self.m_relay1State = False
         self.m_relay2State = False
@@ -47,63 +48,154 @@ class BackendController(QObject):
         self.m_rearPressure = 0
         self.m_brakePercent = 0
 
-        print("Init complete")
+        print("Setting Up MQTT client")
+
+        self.m_mqttServerIp = "test.mosquitto.org"
+        self.m_mqttServerPort = 1883
+
+        self.m_ctrlTopic = "trailer/ctrl/"
+        self.m_monTopic = "trailer/mon/"
+
+        self.m_mqttClient = mqtt.Client()
+        self.m_mqttClient.on_connect = self.on_connect
+        self.m_mqttClient.on_message = self.on_message
+
+        self.m_mqttClient.connect(self.m_mqttServerIp, self.m_mqttServerPort, 60)
+        self.m_mqttClient.loop_start()
+
+        print("Backend init complete")
+
+    # @staticmethod
+    def on_connect(self, client, userdata, flags, rc):
+
+        if rc == 0:
+            print("Connected to MQTT server.")
+
+            # Get Relay states
+            client.subscribe(self.m_monTopic + "relay1")
+            client.subscribe(self.m_monTopic + "relay2")
+            client.subscribe(self.m_monTopic + "relay3")
+            client.subscribe(self.m_monTopic + "relay4")
+            client.subscribe(self.m_monTopic + "relay5")
+            client.subscribe(self.m_monTopic + "relay6")
+
+            # Get Sensor values
+            client.subscribe(self.m_monTopic + "frontPressure")
+            client.subscribe(self.m_monTopic + "tankPressure")
+            client.subscribe(self.m_monTopic + "rearPressure")
+            client.subscribe(self.m_monTopic + "brakePercent")
+
+            # Get Button trigger confirmations
+            client.subscribe(self.m_monTopic + "frontLockState")
+            client.subscribe(self.m_monTopic + "backLockState")
+            client.subscribe(self.m_monTopic + "steerLockState")
+            client.subscribe(self.m_monTopic + "dumpBagsState")
+            client.subscribe(self.m_monTopic + "compressorState")
+            client.subscribe(self.m_monTopic + "lightState")
+
+        else:
+            print("Connection to MQTT server failed with code:", rc)
+
+    # @staticmethod
+    def on_message(self, client, userdata, msg):
+
+        data = msg.payload.decode('UTF-8')
+
+        if 'relay1' in msg.topic:
+            self.relay1State = int(data)
+
+        if 'relay2' in msg.topic:
+            self.relay2State = int(data)
+
+        if 'relay3' in msg.topic:
+            self.relay3State = int(data)
+
+        if 'relay4' in msg.topic:
+            self.relay4State = int(data)
+
+        if 'relay5' in msg.topic:
+            self.relay5State = int(data)
+
+        if 'relay6' in msg.topic:
+            self.relay6State = int(data)
+
+        if 'frontPressure' in msg.topic:
+            self.frontPressure = int(float(data))
+
+        if 'tankPressure' in msg.topic:
+            self.tankPressure = int(float(data))
+
+        if 'rearPressure' in msg.topic:
+            self.rearPressure = int(float(data))
+
+        if 'brakePercent' in msg.topic:
+            self.brakePercent = int(float(data))
+
+        if 'frontLockState' in msg.topic:
+            self.frontLockState = int(data)
+
+        if 'backLockState' in msg.topic:
+            self.backLockState = int(data)
+
+        if 'steerLockState' in msg.topic:
+            self.steerLockState = int(data)
+
+        if 'dumpBagsState' in msg.topic:
+            self.dumpBagsState = int(data)
+
+        if 'compressorState' in msg.topic:
+            self.compressorState = int(data)
+
+        if 'lightState' in msg.topic:
+            self.lightState = int(data)
 
     @pyqtSlot(bool)
     def frontLockTriggered(self, state):
-        print("Front Lock Triggered", state)
-        self.frontLockState = state
+        self.m_mqttClient.publish(self.m_ctrlTopic + "frontLockState", payload=state, qos=0, retain=False)
 
     @pyqtSlot(bool)
     def backLockTriggered(self, state):
-        print("Back Lock Triggered", state)
-        self.backLockState = state
+        self.m_mqttClient.publish(self.m_ctrlTopic + "backLockState", payload=state, qos=0, retain=False)
 
     @pyqtSlot(bool)
     def steerLockTriggered(self, state):
-        print("Steer Lock Triggered", state)
-        self.steerLockState = state
+        self.m_mqttClient.publish(self.m_ctrlTopic + "steerLockState", payload=state, qos=0, retain=False)
 
     @pyqtSlot(bool)
     def dumpBagsTriggered(self, state):
-        print("Dump Bags Triggered", state)
-        self.dumpBagsState = state
+        self.m_mqttClient.publish(self.m_ctrlTopic + "dumpBagsState", payload=state, qos=0, retain=False)
 
     @pyqtSlot(bool)
     def compressorTriggered(self, state):
-        print("Dump Bags Triggered", state)
-        self.compressorState = state
+        self.m_mqttClient.publish(self.m_ctrlTopic + "compressorState", payload=state, qos=0, retain=False)
 
     @pyqtSlot(bool)
     def lightsTriggered(self, state):
-        print("Lights Triggered", state)
-        self.lightState = state
+        self.m_mqttClient.publish(self.m_ctrlTopic + "lightState", payload=state, qos=0, retain=False)
 
     @pyqtSlot(bool)
     def cameraTriggered(self, state):
-        print("Camera Triggered", state)
+        pass
 
     @pyqtSlot()
     def brakeIncPressed(self):
-        print("Brake Increase Press")
-        self.brakePercent += 15
+        self.m_mqttClient.publish(self.m_ctrlTopic + "brakeInc", payload="1", qos=0, retain=False)
 
     @pyqtSlot()
     def brakeIncReleased(self):
-        print("Brake Increase Release")
+        pass
 
     @pyqtSlot()
     def brakeDecPressed(self):
-        print("Brake Decrease Press")
-        self.brakePercent -= 15
+        self.m_mqttClient.publish(self.m_ctrlTopic + "brakeDec", payload="1", qos=0, retain=False)
 
     @pyqtSlot()
     def brakeDecReleased(self):
-        print("Brake Decrease Release")
+        pass
 
     @pyqtSlot()
     def brakeTriggered(self):
-        print("Brakes Triggered")
+        self.m_mqttClient.publish(self.m_ctrlTopic + "brakeState", payload="1", qos=0, retain=False)
 
     # ---------------------------------------- QML Exposed Properties ---------------------------------------- #
 
