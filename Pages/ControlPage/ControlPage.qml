@@ -30,6 +30,18 @@ Item {
         source: "qrc:/Assets/Background/TrailerView.png"
     }
 
+    Image {
+        id: logo
+        width: respWidth(913)
+        height: respHeight(172)
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: respHeight(30)
+        anchors.leftMargin: respWidth(360)
+
+        source: "qrc:/Assets/Background/Logo.png"
+    }
+
     // --------------------- Camera ----------------------------//
 
     Popup {

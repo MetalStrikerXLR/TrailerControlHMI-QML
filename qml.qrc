@@ -3,6 +3,7 @@
         <file>main.qml</file>
         <file>Assets/Background/Background.png</file>
         <file>Assets/Background/TrailerView.png</file>
+        <file>Assets/Background/Logo.png</file>
         <file>Assets/Indicators/RelayIndicator_Green.png</file>
         <file>Assets/Indicators/RelayIndicator_Red.png</file>
         <file>Assets/Buttons/BLockBtn_Green.png</file>
