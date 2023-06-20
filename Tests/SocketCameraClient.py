@@ -7,7 +7,7 @@ import pickle
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect to the server
-host_ip = '127.0.0.1'
+host_ip = '192.168.18.53'
 port = 8485
 client_socket.connect((host_ip, port))
 

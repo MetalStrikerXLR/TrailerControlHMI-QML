@@ -13,10 +13,16 @@ Step1). Install build tools and Update pip and setuptools:
 - sudo apt-get install python3-paho-mqtt
 - sudo apt-get install python3-opencv
 
+Step2). Enable Mosquitto server
+- sudo apt install mosquitto mosquitto-clients
+- sudo systemctl enable mosquitto.service
+- sudo nano /etc/mosquitto/mosquitto.conf
+- 'listener 1883' in mosquitto.conf
+- 'allow_anonymous true' in mosquitto.conf
+- sudo systemctl restart mosquitto
 
-Step2). Execute GUI on Rpi locally (cannot be deployed using SSH):
+Step3). Execute GUI on Rpi locally (cannot be deployed using SSH):
 - export QT_QPA_EGLFS_HIDECURSOR=1 (hide cursor)
 - python3 main.py --platform eglfs
-
 
 Note1: Enable OpenGL for QML app by going to raspi-config (Enabled by default on Raspberry Pi 4)
