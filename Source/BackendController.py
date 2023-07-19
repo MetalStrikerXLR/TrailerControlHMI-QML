@@ -93,6 +93,9 @@ class BackendController(QObject):
             client.subscribe(self.m_monTopic + "compressorState")
             client.subscribe(self.m_monTopic + "lightState")
 
+            # Send Powerup signal
+            self.m_mqttClient.publish(self.m_ctrlTopic + "powerup", payload=1, qos=0, retain=False)
+
         else:
             print("Connection to MQTT server failed with code:", rc)
 
@@ -128,8 +131,8 @@ class BackendController(QObject):
         if 'rearPressure' in msg.topic:
             self.rearPressure = int(float(data))
 
-        if 'brakePercent' in msg.topic:
-            self.brakePercent = int(float(data))
+        # if 'brakePercent' in msg.topic:
+        #     self.brakePercent = int(float(data))
 
         if 'frontLockState' in msg.topic:
             self.frontLockState = int(data)
@@ -175,11 +178,14 @@ class BackendController(QObject):
 
     @pyqtSlot(bool)
     def cameraTriggered(self, state):
-        pass
+        self.m_mqttClient.publish(self.m_ctrlTopic + "cameraState", payload=state, qos=0, retain=False)
 
     @pyqtSlot()
     def brakeIncPressed(self):
-        self.m_mqttClient.publish(self.m_ctrlTopic + "brakeInc", payload="1", qos=0, retain=False)
+        if self.brakePercent < 100:
+            self.brakePercent = self.brakePercent + 1
+
+        self.m_mqttClient.publish(self.m_ctrlTopic + "brakePercent", payload=self.brakePercent, qos=0, retain=False)
 
     @pyqtSlot()
     def brakeIncReleased(self):
@@ -187,7 +193,10 @@ class BackendController(QObject):
 
     @pyqtSlot()
     def brakeDecPressed(self):
-        self.m_mqttClient.publish(self.m_ctrlTopic + "brakeDec", payload="1", qos=0, retain=False)
+        if self.brakePercent > 0:
+            self.brakePercent = self.brakePercent - 1
+
+        self.m_mqttClient.publish(self.m_ctrlTopic + "brakePercent", payload=self.brakePercent, qos=0, retain=False)
 
     @pyqtSlot()
     def brakeDecReleased(self):
