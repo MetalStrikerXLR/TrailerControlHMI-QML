@@ -69,6 +69,11 @@ class CameraCapture(QObject):
         while self.m_busy:
             try:
                 ret, frame = self.m_videoCapture.read()
+
+                # If no frame received, display a black screen
+                if not ret:
+                    frame = 0 * frame
+
                 image = CameraCapture.ToQImage(frame)
                 QMetaObject.invokeMethod(self, "setImage", Qt.QueuedConnection, Q_ARG(QImage, image))
             except:
