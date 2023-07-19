@@ -85,8 +85,12 @@ Item {
 
             CameraCapture{
                 id: camCapture
-                sourceType: "socket"
-                source: 8485
+                sourceType: "opencv"
+                source: 0
+
+                //sourceType: "gstreamer"
+                //source: "udpsrc port=5000 ! application/x-rtp, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! avdec_h264 ! videoconvert ! appsink"
+
                 onStreamAvailable: camViewer.visible = true
                 onStreamNotAvailable: camViewer.visible = false
                 Component.onCompleted: camCapture.start()

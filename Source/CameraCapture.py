@@ -47,6 +47,15 @@ class CameraCapture(QObject):
                 threading.Thread(target=self.opencvFrameCapture, args=()).start()
                 self.started.emit()
 
+        elif self._sourceType == "gstreamer":
+            self.m_videoCapture.release()
+            self.m_videoCapture = cv2.VideoCapture(self._source, cv2.CAP_GSTREAMER)
+
+            if self.m_videoCapture.isOpened():
+                self.m_busy = True
+                threading.Thread(target=self.opencvFrameCapture, args=()).start()
+                self.started.emit()
+
         else:
             print("No sourceType defined for camera object")
 
