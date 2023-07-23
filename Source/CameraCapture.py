@@ -34,53 +34,58 @@ class CameraCapture(QObject):
     def start(self):
 
         if self._sourceType == "socket":
+            print("Using Socket Camera Capture...")
             self.m_busy = True
             threading.Thread(target=self.socketFrameCapture, args=()).start()
             self.started.emit()
 
         elif self._sourceType == "opencv":
+            print("Using OpenCV Camera Capture...")
             self.m_videoCapture.release()
-            self.m_videoCapture = cv2.VideoCapture(self._source)
-
-            if self.m_videoCapture.isOpened():
-                self.m_busy = True
-                threading.Thread(target=self.opencvFrameCapture, args=()).start()
-                self.started.emit()
+            self.m_busy = True
+            threading.Thread(target=self.opencvFrameCapture, args=()).start()
+            self.started.emit()
 
         elif self._sourceType == "gstreamer":
+            print("Using GStreamer Camera Capture...")
             self.m_videoCapture.release()
-            self.m_videoCapture = cv2.VideoCapture(self._source, cv2.CAP_GSTREAMER)
-
-            if self.m_videoCapture.isOpened():
-                self.m_busy = True
-                threading.Thread(target=self.opencvFrameCapture, args=()).start()
-                self.started.emit()
+            self.m_busy = True
+            threading.Thread(target=self.opencvFrameCapture, args=()).start()
+            self.started.emit()
 
         else:
             print("No sourceType defined for camera object")
 
     @pyqtSlot()
     def stop(self):
+        print("Stopping Camera Stream...")
         self.m_busy = False
 
     @pyqtSlot(np.ndarray)
     def opencvFrameCapture(self):
-        self.streamAvailable.emit()
-        while self.m_busy:
-            try:
-                ret, frame = self.m_videoCapture.read()
 
-                # If no frame received, display a black screen
-                if not ret:
-                    frame = 0 * frame
+        if self._sourceType == "opencv":
+            self.m_videoCapture = cv2.VideoCapture(self._source)
+        else:
+            self.m_videoCapture = cv2.VideoCapture(self._source, cv2.CAP_GSTREAMER)
 
-                image = CameraCapture.ToQImage(frame)
-                QMetaObject.invokeMethod(self, "setImage", Qt.QueuedConnection, Q_ARG(QImage, image))
-            except:
-                break
+        if self.m_videoCapture.isOpened():
+            self.streamAvailable.emit()
+            while self.m_busy:
+                try:
+                    ret, frame = self.m_videoCapture.read()
 
-        self.m_videoCapture.release()
-        self.streamNotAvailable.emit()
+                    # If no frame received, display a black screen
+                    if not ret:
+                        frame = 0 * frame
+
+                    image = CameraCapture.ToQImage(frame)
+                    QMetaObject.invokeMethod(self, "setImage", Qt.QueuedConnection, Q_ARG(QImage, image))
+                except:
+                    break
+
+            self.m_videoCapture.release()
+            self.streamNotAvailable.emit()
 
     @pyqtSlot()
     def socketFrameCapture(self):
