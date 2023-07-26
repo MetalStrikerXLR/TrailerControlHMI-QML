@@ -12,7 +12,7 @@ Window {
 
     property int baseWidth: 1375
     property int baseHeight: 825
-    property real baseAvg: 1603.51
+    property real baseAvg: Math.hypot(baseWidth, baseHeight)
 
     function respWidth(w) {
         return appRoot.width * (w/baseWidth);
@@ -23,8 +23,8 @@ Window {
     }
 
     function respAvg(a) {
-        var assetAvg = Math.sqrt(Math.pow(a, 2) + Math.pow(a, 2));
-        return Math.round(Math.sqrt(Math.pow(appRoot.height, 2) + Math.pow(appRoot.width, 2)) * (assetAvg / baseAvg));
+        var assetAvg = Math.hypot(a, a);
+        return Math.round(Math.hypot(appRoot.height,appRoot.width) * (assetAvg / baseAvg));
     }
 
     ControlPage {
