@@ -6,6 +6,6 @@
         "Tests/SocketCameraClient.py",
         "Tests/SocketCameraServer.py",
         "main.py",
-        "resources.qrc"
+        "qml.qrc"
     ]
 }
