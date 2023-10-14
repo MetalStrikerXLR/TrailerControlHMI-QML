@@ -9,3 +9,4 @@
 # Python environment
 venv
 .idea
+*pyproject.user

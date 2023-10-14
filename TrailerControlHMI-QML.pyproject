@@ -1,0 +1,11 @@
+{
+    "files": [
+        "Source/BackendController.py",
+        "Source/CameraCapture.py",
+        "Source/CameraView.py",
+        "Tests/SocketCameraClient.py",
+        "Tests/SocketCameraServer.py",
+        "main.py",
+        "resources.qrc"
+    ]
+}

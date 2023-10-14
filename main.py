@@ -4,7 +4,7 @@ from PyQt5.QtQml import QQmlApplicationEngine, qmlRegisterType
 from Source.BackendController import BackendController
 from Source.CameraCapture import CameraCapture
 from Source.CameraView import CameraView
-import Assets.QRC.Resources
+import resources
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
