@@ -56,7 +56,7 @@ class BackendController(QObject):
         self.m_ctrlTopic = "trailer/ctrl/"
         self.m_monTopic = "trailer/mon/"
 
-        self.m_mqttClient = mqtt.Client()
+        self.m_mqttClient = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         self.m_mqttClient.on_connect = self.on_connect
         self.m_mqttClient.on_message = self.on_message
 
